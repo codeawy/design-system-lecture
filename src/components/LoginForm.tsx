@@ -1,21 +1,22 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { ChangeEvent, FormEvent, Fragment, useState } from "react";
 
+import { IUser } from "../interfaces";
+import { registerFormInputs } from "../lists/registerInputs";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import ButtonGroup from "./ui/ButtonGroup";
-import Link from "./ui/Link";
-
-// ** Backend => User => {username: string,email: string, password: string}
-
-interface IUser {
-  username: string;
-  email: string;
-  password: string;
-}
+import Label from "./ui/Label";
+import InputErrorMsg from "./InputErrorMsg";
+import { loginFormSchema } from "../schema/LoginFormSchema";
 
 const LoginForm = () => {
-  // ** TS
   const [user, setUser] = useState<IUser>({
+    fullName: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<IUser>({
+    fullName: "",
     username: "",
     email: "",
     password: "",
@@ -23,64 +24,51 @@ const LoginForm = () => {
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // ** SEND DATA VIA API
+
+    const validationErrors = loginFormSchema(user);
+    console.log(validationErrors);
+
+    // ** Boolean
+    const allRequiredInputsFilled = Object.values(validationErrors).every(value => value === "");
+
+    if (!allRequiredInputsFilled) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    console.log("SEND USER VIA API");
     console.log(user);
-
-    // ** RESET
   };
+
   return (
-    <>
-      <h2>LOGIN FORM</h2>
-      <form
-        className="space-y-2"
-        onSubmit={onSubmitHandler}
-        onReset={() =>
-          setUser({
-            username: "",
-            email: "",
-            password: "",
-          })
-        }
-      >
-        {/* CONTROLLED INPUT */}
-        <Input
-          type="email"
-          name="email"
-          className="border-2 border-white rounded-md w-full py-1 px-2"
-          placeholder="Email"
-          value={user["email"]}
-          onChange={onChangeHandler}
-          text="CODEAWY"
-        />
-        <input
-          type="password"
-          name="password"
-          className="border-2 border-white rounded-md w-full py-1 px-2"
-          placeholder="Password"
-          value={user["password"]}
-          onChange={onChangeHandler}
-        />
-        <ButtonGroup>
-          <Button>Submit</Button>
-          <Button variant={"secondary"}>RESET</Button>
-          <Button variant={"destructive"}>Destroy</Button>
-          <Button>Small</Button>
-          <Button>Large</Button>
-        </ButtonGroup>
+    <div className="w-[350px] mx-auto">
+      <h2 className="text-center text-3xl mb-10">Build a new Project</h2>
+      <form className="space-y-3 border-[1px] border-gray-300 p-2 rounded-md" onSubmit={onSubmitHandler}>
+        {registerFormInputs.map(input => (
+          <Fragment key={input.id}>
+            <Label htmlFor={input.id}>{input.name}</Label>
+            <div className="flex flex-col space-x-3">
+              <Input
+                id={input.id}
+                type={input["name"]}
+                name={input.name}
+                placeholder={input.placeholder}
+                value={user[input.name]}
+                onChange={onChangeHandler}
+              />
+
+              <InputErrorMsg errorMsg={errors[input.name]} />
+            </div>
+          </Fragment>
+        ))}
+        <Button fullWidth>Submit</Button>
       </form>
-
-      <Link href="/nextjs.org" variant={"default"} size="sm">
-        Get Started
-      </Link>
-
-      <Link href="/nextjs.org" variant="secondary" size="lg">
-        Learn Next.js
-      </Link>
-    </>
+    </div>
   );
 };
 

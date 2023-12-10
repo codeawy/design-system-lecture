@@ -1,7 +1,3 @@
-[] - Shared UI components
-
-[] - Mapping
-
+[] - Label, ErrorMessage
 [] - Form Validation
-
 [] - Logical Thinking

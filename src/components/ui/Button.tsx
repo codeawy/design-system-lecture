@@ -3,11 +3,8 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "../../lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-// ** Default styles (WITH ALL VARIANTS => default, solid, secondary, and ghost)
-// **
 export const buttonVariants = cva("p-2 rounded-md text-base w-fit ", {
   variants: {
-    // ** Variants =>  default, secondary, ghost
     variant: {
       default: "bg-white text-black",
       secondary: "bg-gray-500 hover:bg-gray-700 duration-300",
@@ -17,6 +14,9 @@ export const buttonVariants = cva("p-2 rounded-md text-base w-fit ", {
       sm: "text-sm p-1",
       md: "text-base ",
       lg: "text-lg p-4",
+    },
+    fullWidth: {
+      true: "w-full",
     },
   },
   defaultVariants: {
@@ -29,9 +29,9 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<t
   children: ReactNode;
 }
 
-const Button = ({ children, variant, size, ...rest }: IProps) => {
+const Button = ({ children, variant, size, fullWidth, ...rest }: IProps) => {
   return (
-    <button className={cn(buttonVariants({ variant, size }))} {...rest}>
+    <button className={cn(buttonVariants({ variant, size, fullWidth }))} {...rest}>
       {children}
     </button>
   );

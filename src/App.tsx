@@ -2,13 +2,10 @@ import LoginForm from "./components/LoginForm";
 
 function App() {
   return (
-    <div className="app-wrapper">
-      {/* <ProductCardList /> */}
+    <div className="container">
       <LoginForm />
     </div>
   );
 }
 
 export default App;
-
-// ** Login => username, email, and password

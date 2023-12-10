@@ -1,11 +1,16 @@
 import { InputHTMLAttributes } from "react";
 
-interface IProps extends InputHTMLAttributes<HTMLInputElement> {
-  text: string;
-}
+interface IProps extends InputHTMLAttributes<HTMLInputElement> {}
 
-const Input = (props: IProps) => {
-  return <input {...props} test-id={props.text} />;
+const Input = ({ ...rest }: IProps) => {
+  return (
+    <input
+      className="border-[1px] border-gray-300 shadow-md focus:border-indigo-500 
+      focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded-lg 
+      px-3 py-3 text-md w-full"
+      {...rest}
+    />
+  );
 };
 
 export default Input;
