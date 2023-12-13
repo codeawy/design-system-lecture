@@ -8,7 +8,7 @@ export const buttonVariants = cva("p-2 rounded-md text-base w-fit ", {
     variant: {
       default: "bg-white text-black",
       secondary: "bg-gray-500 hover:bg-gray-700 duration-300",
-      destructive: "bg-red-500 hover:bg-red-600",
+      // destructive: "bg-red-500 hover:bg-red-600",
     },
     size: {
       sm: "text-sm p-1",
@@ -29,9 +29,9 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<t
   children: ReactNode;
 }
 
-const Button = ({ children, variant, size, fullWidth, ...rest }: IProps) => {
+const Button = ({ children, variant, size, fullWidth, className, ...rest }: IProps) => {
   return (
-    <button className={cn(buttonVariants({ variant, size, fullWidth }))} {...rest}>
+    <button className={cn(buttonVariants({ variant, size, fullWidth, className }))} {...rest}>
       {children}
     </button>
   );
